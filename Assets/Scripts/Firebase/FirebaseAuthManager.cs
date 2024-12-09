@@ -93,11 +93,19 @@ namespace Firebase {
                 // If !signin and previous user != null and current user == null
                 // then sign out
                 var signedIn = _user != _auth.CurrentUser && _auth.CurrentUser != null;
-                if (!signedIn && _user != null) Debug.Log("Signed out + " + _user.UserId);
-
+                if (!signedIn && _user != null) {
+                    Debug.Log("Signed out + " + _user.UserId);
+                    UIManager.instance.OpenLoginPanel();
+                }
                 // Change previous user to current user
                 _user = _auth.CurrentUser;
                 if (signedIn) Debug.Log("Signed in + " + _user.UserId);
+            }
+        }
+
+        public void Logout() {
+            if (_auth != null && _user != null) {
+                _auth.SignOut();
             }
         }
 

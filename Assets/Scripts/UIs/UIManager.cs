@@ -6,18 +6,28 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour {
     public static UIManager instance;
 
+    [Header("Menu Panels")]
     [SerializeField] private GameObject loginPanel;
     [SerializeField] private GameObject registerPanel;
     [SerializeField] private GameObject emailVerificationPanel;
     [SerializeField] private GameObject gameEntrancePanel;
     [SerializeField] private Text emailVerificationText;
+    
+    // Login variables
+    [Space] [Header("Login")] public InputField emailLoginField;
+    public InputField passwordLoginField;
 
+    // Register variables
+    [Space] [Header("Register")] public InputField usernameRegisterField;
+    public InputField emailRegisterField;
+    public InputField passwordRegisterField;
+    public InputField passwordConfirmRegisterField;
+    
     private void Awake() {
         if (instance == null) instance = this;
     }
 
     private void Start() {
-        OpenLoginPanel();
     }
 
     private void ClearUI() {
@@ -29,11 +39,13 @@ public class UIManager : MonoBehaviour {
 
     public void OpenLoginPanel() {
         ClearUI();
+        ClearLoginInputFields();
         loginPanel.SetActive(true);
     }
 
     public void OpenRegisterPanel() {
         ClearUI();
+        ClearRegisterInputFields();
         registerPanel.SetActive(true);
     }
 
@@ -52,6 +64,18 @@ public class UIManager : MonoBehaviour {
     public void OpenGameEntrancePanel() {
         ClearUI();
         gameEntrancePanel.SetActive(true);
+    }
+
+    public void ClearLoginInputFields() {
+        emailLoginField.text = "";
+        passwordLoginField.text = "";
+    }
+
+    public void ClearRegisterInputFields() {
+        usernameRegisterField.text = "";
+        emailRegisterField.text = "";
+        passwordRegisterField.text = "";
+        passwordConfirmRegisterField.text = "";
     }
 
     public void GoToGameScene() {
