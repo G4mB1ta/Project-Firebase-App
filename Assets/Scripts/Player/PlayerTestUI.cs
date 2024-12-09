@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class PlayerTestUI : MonoBehaviour {
@@ -68,5 +69,9 @@ public class PlayerTestUI : MonoBehaviour {
         strPoints.pointText.text = Player.instance.playerStats.GetCStat(CStat.Strength).ToString();
         spdPoints.pointText.text = Player.instance.playerStats.GetCStat(CStat.Agility).ToString();
         itlPoints.pointText.text = Player.instance.playerStats.GetCStat(CStat.Intelligence).ToString();
+    }
+
+    public void GoToMenu() {
+        SceneManager.LoadScene("FirebaseLogin");
     }
 }

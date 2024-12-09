@@ -29,7 +29,7 @@ namespace Firebase {
 
         // ReSharper disable Unity.PerformanceAnalysis
         private IEnumerator CheckAndFixDependenciesAsync() {
-            System.Environment.SetEnvironmentVariable("USE_AUTH_EMULATOR", "localhost:9099");
+            Environment.SetEnvironmentVariable("USE_AUTH_EMULATOR", "localhost:9099");
             var dependencyTask = FirebaseApp.CheckAndFixDependenciesAsync();
             yield return new WaitUntil(() => dependencyTask.IsCompleted);
 
@@ -74,7 +74,7 @@ namespace Firebase {
                 if (_user.IsEmailVerified) {
                     Reference.name = _user.DisplayName;
                     Debug.Log(Reference.name + " is now logged in.");
-                    SceneManager.LoadScene("GameScene");    
+                    UIManager.instance.OpenGameEntrancePanel();
                 }
                 else {
                     SendEmailForVerification();
@@ -121,23 +121,13 @@ namespace Firebase {
                 var authError = (AuthError)firebaseException.ErrorCode;
 
                 var failureMessage = "Login failed: ";
-                switch (authError) {
-                    case AuthError.InvalidEmail:
-                        failureMessage += "Invalid email address";
-                        break;
-                    case AuthError.WrongPassword:
-                        failureMessage += "Wrong password";
-                        break;
-                    case AuthError.MissingEmail:
-                        failureMessage += "Email is missing";
-                        break;
-                    case AuthError.MissingPassword:
-                        failureMessage += "Password is missing";
-                        break;
-                    default:
-                        failureMessage += "Unknown Error";
-                        break;
-                }
+                failureMessage += authError switch {
+                    AuthError.InvalidEmail => "Invalid email address",
+                    AuthError.WrongPassword => "Wrong password",
+                    AuthError.MissingEmail => "Email is missing",
+                    AuthError.MissingPassword => "Password is missing",
+                    _ => "Unknown Error"
+                };
 
                 Debug.LogError(failureMessage);
             }
@@ -148,12 +138,11 @@ namespace Firebase {
 
                 if (_user.IsEmailVerified) {
                     Reference.name = _user.DisplayName;
-                    SceneManager.LoadScene("GameScene");
+                    UIManager.instance.OpenGameEntrancePanel();
                 }
                 else {
                     SendEmailForVerification();
                 }
-                
             }
         }
 
@@ -187,23 +176,13 @@ namespace Firebase {
                     var authError = (AuthError)firebaseException.ErrorCode;
 
                     var failureMessage = "Register failed: ";
-                    switch (authError) {
-                        case AuthError.InvalidEmail:
-                            failureMessage += "Invalid email address";
-                            break;
-                        case AuthError.WrongPassword:
-                            failureMessage += "Wrong password";
-                            break;
-                        case AuthError.MissingEmail:
-                            failureMessage += "Email is missing";
-                            break;
-                        case AuthError.MissingPassword:
-                            failureMessage += "Password is missing";
-                            break;
-                        default:
-                            failureMessage += "Unknown Error";
-                            break;
-                    }
+                    failureMessage += authError switch {
+                        AuthError.InvalidEmail => "Invalid email address",
+                        AuthError.WrongPassword => "Wrong password",
+                        AuthError.MissingEmail => "Email is missing",
+                        AuthError.MissingPassword => "Password is missing",
+                        _ => "Unknown Error"
+                    };
 
                     Debug.LogError(failureMessage);
                 }
@@ -222,35 +201,23 @@ namespace Firebase {
                         var firebaseException = updateProfileTask.Exception.GetBaseException() as FirebaseException;
                         var authError = (AuthError)firebaseException.ErrorCode;
                         var failureMessage = "Profile update failed: ";
-                        switch (authError) {
-                            case AuthError.InvalidEmail:
-                                failureMessage += "Invalid email address";
-                                break;
-                            case AuthError.WrongPassword:
-                                failureMessage += "Wrong password";
-                                break;
-                            case AuthError.MissingEmail:
-                                failureMessage += "Email is missing";
-                                break;
-                            case AuthError.MissingPassword:
-                                failureMessage += "Password is missing";
-                                break;
-                            default:
-                                failureMessage += "Unknown Error";
-                                break;
-                        }
+                        failureMessage += authError switch {
+                            AuthError.InvalidEmail => "Invalid email address",
+                            AuthError.WrongPassword => "Wrong password",
+                            AuthError.MissingEmail => "Email is missing",
+                            AuthError.MissingPassword => "Password is missing",
+                            _ => "Unknown Error"
+                        };
 
                         Debug.LogError(failureMessage);
                     }
                     else {
                         // Update profile task successfully
                         Debug.Log($"{_user.DisplayName} registered successfully");
-                        if (_user.IsEmailVerified) {
+                        if (_user.IsEmailVerified)
                             UIManager.instance.OpenLoginPanel();
-                        }
-                        else {
+                        else
                             SendEmailForVerification();
-                        }
                     }
                 }
             }
@@ -264,33 +231,25 @@ namespace Firebase {
         private IEnumerator SendEmailForVerificationAsync() {
             if (_user != null) {
                 var sendEmailTask = _user.SendEmailVerificationAsync();
-                
+
                 yield return new WaitUntil(() => sendEmailTask.IsCompleted);
 
                 if (sendEmailTask.Exception != null) {
-                    FirebaseException firebaseException = sendEmailTask.Exception.GetBaseException() as FirebaseException;
-                    AuthError authError = (AuthError)firebaseException.ErrorCode;
+                    var firebaseException = sendEmailTask.Exception.GetBaseException() as FirebaseException;
+                    var authError = (AuthError)firebaseException.ErrorCode;
 
-                    string errorMessage = "Unknown Error: Please try again. ";
-                    switch (authError) {
-                        case AuthError.Cancelled:
-                            errorMessage += "Email is cancelled";
-                            break;
-                        case AuthError.InvalidEmail:
-                            errorMessage += "Invalid email address";
-                            break;
-                        case AuthError.TooManyRequests:
-                            errorMessage += "Too Many Requests";
-                            break;
-                        default:
-                            errorMessage += "Unknown Error";
-                            break;
-                    }
+                    var errorMessage = "Unknown Error: Please try again. ";
+                    errorMessage += authError switch {
+                        AuthError.Cancelled => "Email is cancelled",
+                        AuthError.InvalidEmail => "Invalid email address",
+                        AuthError.TooManyRequests => "Too Many Requests",
+                        _ => "Unknown Error"
+                    };
                     UIManager.instance.OpenEmailVerificationResponse(false, null, errorMessage);
                 }
                 else {
                     UIManager.instance.OpenEmailVerificationResponse(true, _auth.CurrentUser.Email, null);
-                    Debug.Log($"Email has successfully sent");    
+                    Debug.Log("Email has successfully sent");
                 }
             }
         }
