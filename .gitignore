@@ -79,3 +79,6 @@ crashlytics-build.properties
 /[Aa]ssets/ExternalDependencyManager/
 /[Aa]ssets/StreamingAssets/
 /[Aa]ssets/TextMesh Pro/
+
+/.idea
+.idea/.idea.Project Firebase App/.idea/workspace.xml
