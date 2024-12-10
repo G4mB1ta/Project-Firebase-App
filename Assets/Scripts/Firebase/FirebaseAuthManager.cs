@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using Firebase.Auth;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace Firebase {
@@ -22,6 +21,9 @@ namespace Firebase {
         public InputField passwordRegisterField;
         public InputField passwordConfirmRegisterField;
 
+        
+        private string _defaultProfilePictureUrl = "https://robohash.org/34ff89714b43504fc3018653c3438eec?set=set4&bgset=&size=400x400";
+        
         private void Awake() {
             // Firebase Unity SDK for Android requires Google Play services
             StartCoroutine(CheckAndFixDependenciesAsync());
@@ -74,7 +76,19 @@ namespace Firebase {
                 if (_user.IsEmailVerified) {
                     Reference.name = _user.DisplayName;
                     Debug.Log(Reference.name + " is now logged in.");
+
+                    // Check if user have profile picture
+                    if (_user.PhotoUrl != null) {
+                        if (!string.IsNullOrEmpty(_user.PhotoUrl.ToString())) {
+                            UIManager.instance.LoadProfilePicture(_user.PhotoUrl.ToString());
+                        }    
+                    }
+                    else {
+                        UIManager.instance.LoadProfilePicture(_defaultProfilePictureUrl);
+                    }
+                    
                     UIManager.instance.OpenGameEntrancePanel();
+                    
                 }
                 else {
                     SendEmailForVerification();
@@ -97,6 +111,7 @@ namespace Firebase {
                     Debug.Log("Signed out + " + _user.UserId);
                     UIManager.instance.OpenLoginPanel();
                 }
+
                 // Change previous user to current user
                 _user = _auth.CurrentUser;
                 if (signedIn) Debug.Log("Signed in + " + _user.UserId);
@@ -104,9 +119,7 @@ namespace Firebase {
         }
 
         public void Logout() {
-            if (_auth != null && _user != null) {
-                _auth.SignOut();
-            }
+            if (_auth != null && _user != null) _auth.SignOut();
         }
 
         public void Login() {
@@ -146,6 +159,15 @@ namespace Firebase {
 
                 if (_user.IsEmailVerified) {
                     Reference.name = _user.DisplayName;
+
+                    if (_user.PhotoUrl != null) {
+                        if (!string.IsNullOrEmpty(_user.PhotoUrl.ToString())) {
+                            UIManager.instance.LoadProfilePicture(_user.PhotoUrl.ToString());
+                        }   
+                    }
+                    else {
+                        UIManager.instance.LoadProfilePicture(_defaultProfilePictureUrl);
+                    }
                     UIManager.instance.OpenGameEntrancePanel();
                 }
                 else {
@@ -197,7 +219,7 @@ namespace Firebase {
                 // Register successfully
                 else {
                     _user = registerTask.Result.User;
-                    var userProfile = new UserProfile { DisplayName = username };
+                    var userProfile = new UserProfile { DisplayName = username, PhotoUrl = new Uri(_defaultProfilePictureUrl)};
 
                     var updateProfileTask = _user.UpdateUserProfileAsync(userProfile);
                     yield return new WaitUntil(() => updateProfileTask.IsCompleted);
@@ -258,6 +280,31 @@ namespace Firebase {
                 else {
                     UIManager.instance.OpenEmailVerificationResponse(true, _auth.CurrentUser.Email, null);
                     Debug.Log("Email has successfully sent");
+                }
+            }
+        }
+
+        public void UpdateProfilePicture() {
+            StartCoroutine(UpdateProfilePictureAsync());
+        }
+
+        // ReSharper disable Unity.PerformanceAnalysis
+        private IEnumerator UpdateProfilePictureAsync() {
+            if (_user != null) {
+                // Get url from urlInputField of UIManager and create new Profile from that
+                var url = UIManager.instance.GetProfilePictureURL();
+                var userProfile = new UserProfile {
+                    PhotoUrl = new Uri(url)
+                };
+                
+                // Update Profile Task
+                var profileTask = _user.UpdateUserProfileAsync(userProfile);
+                yield return new WaitUntil(() => profileTask.IsCompleted);
+                if (profileTask.Exception != null) {
+                    Debug.LogError(profileTask.Exception);
+                }
+                else {
+                    UIManager.instance.LoadProfilePicture(_user.PhotoUrl.ToString());
                 }
             }
         }

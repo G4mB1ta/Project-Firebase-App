@@ -1,5 +1,9 @@
+using System;
+using System.Collections;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -13,6 +17,7 @@ public class UIManager : MonoBehaviour {
     [SerializeField] private GameObject gameEntrancePanel;
     [SerializeField] private Text emailVerificationText;
     
+    
     // Login variables
     [Space] [Header("Login")] public InputField emailLoginField;
     public InputField passwordLoginField;
@@ -23,6 +28,11 @@ public class UIManager : MonoBehaviour {
     public InputField passwordRegisterField;
     public InputField passwordConfirmRegisterField;
     
+    // Avatar Update
+    [Space] [Header("Avatar")]
+    public GameObject avatarUpdatePanel;
+    public Image avatarImage;
+    public InputField urlInputField;
     private void Awake() {
         if (instance == null) instance = this;
     }
@@ -35,6 +45,7 @@ public class UIManager : MonoBehaviour {
         registerPanel.SetActive(false);
         emailVerificationPanel.SetActive(false);
         gameEntrancePanel.SetActive(false);
+        avatarUpdatePanel.SetActive(false);
     }
 
     public void OpenLoginPanel() {
@@ -61,6 +72,12 @@ public class UIManager : MonoBehaviour {
         }
     }
 
+    public void OpenAvatarUpdatePanel() {
+        ClearUI();
+        avatarUpdatePanel.SetActive(true);
+        urlInputField.text = "";
+    }
+
     public void OpenGameEntrancePanel() {
         ClearUI();
         gameEntrancePanel.SetActive(true);
@@ -80,5 +97,31 @@ public class UIManager : MonoBehaviour {
 
     public void GoToGameScene() {
         SceneManager.LoadScene("GameScene");
+    }
+
+    public void LoadProfilePicture(string url) {
+        StartCoroutine(LoadProfilePictureIE(url));
+    }
+
+    // ReSharper disable Unity.PerformanceAnalysis
+    private IEnumerator LoadProfilePictureIE(string url) {
+        UnityWebRequest uwr = UnityWebRequestTexture.GetTexture(url);
+        yield return uwr.SendWebRequest();
+
+        if (uwr.result == UnityWebRequest.Result.ConnectionError 
+            || uwr.result == UnityWebRequest.Result.ProtocolError
+            || uwr.result == UnityWebRequest.Result.DataProcessingError) {
+            Debug.Log(uwr.error);
+        }
+        else {
+            Texture2D texture = DownloadHandlerTexture.GetContent(uwr);
+            Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.zero);
+            avatarImage.sprite = sprite;
+            OpenGameEntrancePanel();
+        }
+    }
+
+    public string GetProfilePictureURL() {
+        return urlInputField.text;
     }
 }
