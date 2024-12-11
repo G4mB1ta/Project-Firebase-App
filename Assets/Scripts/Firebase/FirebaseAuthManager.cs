@@ -7,23 +7,26 @@ using UnityEngine.UI;
 namespace Firebase {
     public class FirebaseAuthManager : MonoBehaviour {
         // Firebase variables
-        [Header("Firebase")] public DependencyStatus dependencyStatus;
+        [Header("Firebase")] 
+        public DependencyStatus dependencyStatus;
         private FirebaseAuth _auth;
         private FirebaseUser _user;
 
         // Login variables
-        [Space] [Header("Login")] public InputField emailLoginField;
+        [Space] [Header("Login")] 
+        public InputField emailLoginField;
         public InputField passwordLoginField;
 
         // Register variables
-        [Space] [Header("Register")] public InputField usernameRegisterField;
+        [Space] [Header("Register")] 
+        public InputField usernameRegisterField;
         public InputField emailRegisterField;
         public InputField passwordRegisterField;
         public InputField passwordConfirmRegisterField;
 
-        
-        private string _defaultProfilePictureUrl = "https://robohash.org/34ff89714b43504fc3018653c3438eec?set=set4&bgset=&size=400x400";
-        
+
+        private const string DefaultProfilePictureUrl = "https://robohash.org/34ff89714b43504fc3018653c3438eec?set=set4&bgset=&size=400x400";
+
         private void Awake() {
             // Firebase Unity SDK for Android requires Google Play services
             StartCoroutine(CheckAndFixDependenciesAsync());
@@ -40,7 +43,7 @@ namespace Firebase {
                 InitializeFirebase();
                 yield return new WaitForEndOfFrame();
                 // Check For Auto Login
-                StartCoroutine(CheckForAutoLogin());
+                // StartCoroutine(CheckForAutoLogin());
             }
             else {
                 Debug.LogError("Could not resolve all Firebase dependencies: " + dependencyStatus);
@@ -84,16 +87,18 @@ namespace Firebase {
                         }    
                     }
                     else {
-                        UIManager.instance.LoadProfilePicture(_defaultProfilePictureUrl);
+                        UIManager.instance.LoadProfilePicture(DefaultProfilePictureUrl);
                     }
-                    
+                    // Open Game Entrance Panel after loaded User's profile picture
                     UIManager.instance.OpenGameEntrancePanel();
                     
                 }
+                // send email for verification if user has not verified yet
                 else {
                     SendEmailForVerification();
                 }
             }
+            // login if there is no any user
             else {
                 UIManager.instance.OpenLoginPanel();
             }
@@ -119,7 +124,7 @@ namespace Firebase {
         }
 
         public void Logout() {
-            if (_auth != null && _user != null) _auth.SignOut();
+            if (_auth != null && _user != null && UIManager.instance.IsloadingProfilePicture() == false) _auth.SignOut();
         }
 
         public void Login() {
@@ -166,7 +171,7 @@ namespace Firebase {
                         }   
                     }
                     else {
-                        UIManager.instance.LoadProfilePicture(_defaultProfilePictureUrl);
+                        UIManager.instance.LoadProfilePicture(DefaultProfilePictureUrl);
                     }
                     UIManager.instance.OpenGameEntrancePanel();
                 }
@@ -219,7 +224,7 @@ namespace Firebase {
                 // Register successfully
                 else {
                     _user = registerTask.Result.User;
-                    var userProfile = new UserProfile { DisplayName = username, PhotoUrl = new Uri(_defaultProfilePictureUrl)};
+                    var userProfile = new UserProfile { DisplayName = username, PhotoUrl = new Uri(DefaultProfilePictureUrl)};
 
                     var updateProfileTask = _user.UpdateUserProfileAsync(userProfile);
                     yield return new WaitUntil(() => updateProfileTask.IsCompleted);

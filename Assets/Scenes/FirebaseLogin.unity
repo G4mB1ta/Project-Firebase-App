@@ -343,7 +343,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 469082828}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
-        m_MethodName: OpenAvatarUpdatePanel
+        m_MethodName: OpenProfilePictureUpdatePanel
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1350,7 +1350,7 @@ GameObject:
   m_Component:
   - component: {fileID: 350581754}
   m_Layer: 5
-  m_Name: Login
+  m_Name: Login Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1923,14 +1923,14 @@ MonoBehaviour:
   emailVerificationPanel: {fileID: 2112088287}
   gameEntrancePanel: {fileID: 522438667}
   emailVerificationText: {fileID: 1983624089}
+  profileUpdatePanel: {fileID: 1431114538}
   emailLoginField: {fileID: 896712346}
   passwordLoginField: {fileID: 1577326456}
   usernameRegisterField: {fileID: 1781917333}
   emailRegisterField: {fileID: 1542321294}
   passwordRegisterField: {fileID: 77452608}
   passwordConfirmRegisterField: {fileID: 353647575}
-  avatarUpdatePanel: {fileID: 1431114538}
-  avatarImage: {fileID: 1513594955}
+  profileImage: {fileID: 1513594955}
   urlInputField: {fileID: 1286889240}
 --- !u!1 &502318516
 GameObject:
@@ -2076,7 +2076,7 @@ GameObject:
   - component: {fileID: 513646461}
   - component: {fileID: 513646460}
   m_Layer: 5
-  m_Name: Panel
+  m_Name: Profile Picture Url
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2178,7 +2178,7 @@ GameObject:
   m_Component:
   - component: {fileID: 522438668}
   m_Layer: 5
-  m_Name: Game Entrance
+  m_Name: Game Entrance Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2258,7 +2258,7 @@ GameObject:
   - component: {fileID: 635707610}
   - component: {fileID: 635707609}
   m_Layer: 5
-  m_Name: Upload
+  m_Name: Upload Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2549,7 +2549,7 @@ GameObject:
   m_Component:
   - component: {fileID: 770145240}
   m_Layer: 5
-  m_Name: Register
+  m_Name: Register Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4008,7 +4008,7 @@ GameObject:
   - component: {fileID: 1431114541}
   - component: {fileID: 1431114540}
   m_Layer: 5
-  m_Name: AvatarUpdatePanel
+  m_Name: Profile Update Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4826,7 +4826,7 @@ GameObject:
   - component: {fileID: 1513594956}
   - component: {fileID: 1513594955}
   m_Layer: 5
-  m_Name: Image
+  m_Name: Profile Picture
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6150,7 +6150,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2112088288}
   m_Layer: 5
-  m_Name: Email Verification
+  m_Name: Email Verification Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -1,7 +1,4 @@
-using System;
 using System.Collections;
-using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
@@ -10,34 +7,35 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour {
     public static UIManager instance;
 
-    [Header("Menu Panels")]
+    [Header("Menu Panels")] 
     [SerializeField] private GameObject loginPanel;
     [SerializeField] private GameObject registerPanel;
     [SerializeField] private GameObject emailVerificationPanel;
     [SerializeField] private GameObject gameEntrancePanel;
     [SerializeField] private Text emailVerificationText;
-    
-    
+    [SerializeField] private GameObject profileUpdatePanel;
+
     // Login variables
-    [Space] [Header("Login")] public InputField emailLoginField;
-    public InputField passwordLoginField;
+    [Space] [Header("Login")] 
+    [SerializeField] private InputField emailLoginField;
+    [SerializeField] private InputField passwordLoginField;
 
     // Register variables
-    [Space] [Header("Register")] public InputField usernameRegisterField;
-    public InputField emailRegisterField;
-    public InputField passwordRegisterField;
-    public InputField passwordConfirmRegisterField;
-    
+    [Space] [Header("Register")] 
+    [SerializeField] private InputField usernameRegisterField;
+    [SerializeField] private InputField emailRegisterField;
+    [SerializeField] private InputField passwordRegisterField;
+    [SerializeField] private InputField passwordConfirmRegisterField;
+
     // Avatar Update
-    [Space] [Header("Avatar")]
-    public GameObject avatarUpdatePanel;
-    public Image avatarImage;
-    public InputField urlInputField;
+    [Space] [Header("Avatar")] 
+    [SerializeField] private Image profileImage;
+    [SerializeField] private InputField urlInputField;
+    
+    private bool _loadingProfilePicture = false;
+    
     private void Awake() {
         if (instance == null) instance = this;
-    }
-
-    private void Start() {
     }
 
     private void ClearUI() {
@@ -45,7 +43,7 @@ public class UIManager : MonoBehaviour {
         registerPanel.SetActive(false);
         emailVerificationPanel.SetActive(false);
         gameEntrancePanel.SetActive(false);
-        avatarUpdatePanel.SetActive(false);
+        profileUpdatePanel.SetActive(false);
     }
 
     public void OpenLoginPanel() {
@@ -63,18 +61,13 @@ public class UIManager : MonoBehaviour {
     public void OpenEmailVerificationResponse(bool isEmailSend, string emailId, string errorMessage) {
         ClearUI();
         emailVerificationPanel.SetActive(true);
-
-        if (isEmailSend) {
-            emailVerificationText.text = $"Please verify your email address\nVerification email has been sent to {emailId}";            
-        }
-        else {
-            emailVerificationText.text = $"Couldn't send email: {errorMessage}";
-        }
+        emailVerificationText.text = isEmailSend ? $"Please verify your email address\nVerification email has been sent to {emailId}" : $"Couldn't send email: {errorMessage}";
     }
 
-    public void OpenAvatarUpdatePanel() {
+    public void OpenProfilePictureUpdatePanel() {
+        if (_loadingProfilePicture) return;
         ClearUI();
-        avatarUpdatePanel.SetActive(true);
+        profileUpdatePanel.SetActive(true);
         urlInputField.text = "";
     }
 
@@ -83,12 +76,12 @@ public class UIManager : MonoBehaviour {
         gameEntrancePanel.SetActive(true);
     }
 
-    public void ClearLoginInputFields() {
+    private void ClearLoginInputFields() {
         emailLoginField.text = "";
         passwordLoginField.text = "";
     }
 
-    public void ClearRegisterInputFields() {
+    private void ClearRegisterInputFields() {
         usernameRegisterField.text = "";
         emailRegisterField.text = "";
         passwordRegisterField.text = "";
@@ -96,6 +89,7 @@ public class UIManager : MonoBehaviour {
     }
 
     public void GoToGameScene() {
+        if (_loadingProfilePicture) return;
         SceneManager.LoadScene("GameScene");
     }
 
@@ -105,20 +99,29 @@ public class UIManager : MonoBehaviour {
 
     // ReSharper disable Unity.PerformanceAnalysis
     private IEnumerator LoadProfilePictureIE(string url) {
-        UnityWebRequest uwr = UnityWebRequestTexture.GetTexture(url);
+        _loadingProfilePicture = true;
+        
+        // Loading User's profile picture        
+        var uwr = UnityWebRequestTexture.GetTexture(url);
         yield return uwr.SendWebRequest();
 
-        if (uwr.result == UnityWebRequest.Result.ConnectionError 
+        // if there is any error show it on console
+        if (uwr.result == UnityWebRequest.Result.ConnectionError
             || uwr.result == UnityWebRequest.Result.ProtocolError
             || uwr.result == UnityWebRequest.Result.DataProcessingError) {
             Debug.Log(uwr.error);
         }
         else {
-            Texture2D texture = DownloadHandlerTexture.GetContent(uwr);
-            Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.zero);
-            avatarImage.sprite = sprite;
-            OpenGameEntrancePanel();
+            // Set profileImage 
+            var texture = DownloadHandlerTexture.GetContent(uwr);
+            var sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.zero);
+            profileImage.sprite = sprite;
         }
+        _loadingProfilePicture = false;
+    }
+
+    public bool IsloadingProfilePicture() {
+        return _loadingProfilePicture;
     }
 
     public string GetProfilePictureURL() {
