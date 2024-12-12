@@ -1,7 +1,9 @@
 using System.Collections.Generic;
+using DataPersistence;
+using DataPersistence.Data;
 using UnityEngine;
 
-public class PlayerStats : MonoBehaviour {
+public class PlayerStats : MonoBehaviour, IDataPersistence {
     // Player level sys
     private int _level;
     private int _exp;
@@ -17,6 +19,26 @@ public class PlayerStats : MonoBehaviour {
             { CStat.Agility, 0 },
             { CStat.Intelligence, 0 }
         };
+    }
+
+    public void LoadGame(GameData data) {
+        AddExp(data.exp);
+        _statPoint = data.statPoints;
+        _stats[CStat.Health] = data.healthPoints;
+        _stats[CStat.Strength] = data.strengthPoints;
+        _stats[CStat.Agility] = data.agilityPoints;
+        _stats[CStat.Intelligence] = data.intelligencePoints;
+        PlayerTestUI.instance.RefreshUI();
+    }
+
+    public void SaveGame(ref GameData data) {
+        data.level = this._level;
+        data.exp = this._exp;
+        data.statPoints = this._statPoint;
+        data.healthPoints = this._stats[CStat.Health];
+        data.strengthPoints = this._stats[CStat.Strength];
+        data.agilityPoints = this._stats[CStat.Agility];
+        data.intelligencePoints = this._stats[CStat.Intelligence];
     }
 
     // Minus CStat points
@@ -56,7 +78,6 @@ public class PlayerStats : MonoBehaviour {
             _statPoint += (newLevel - previousLevel) * 3;
         }
 
-        Debug.Log($"Lvl.{_level} : Added {exp} exp");
         PlayerTestUI.instance.RefreshUI();
     }
 

@@ -178,7 +178,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a021d1c1f658d434595e8c6f55217736, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cStat: 0
+  cStat: 1
   nameText: {fileID: 923752986}
   pointText: {fileID: 199313221}
   minusButton: {fileID: 1063784582}
@@ -1984,7 +1984,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a021d1c1f658d434595e8c6f55217736, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cStat: 0
+  cStat: 3
   nameText: {fileID: 1215160315}
   pointText: {fileID: 706273261}
   minusButton: {fileID: 1849166525}
@@ -4478,7 +4478,7 @@ GameObject:
   - component: {fileID: 1400941372}
   - component: {fileID: 1400941371}
   m_Layer: 5
-  m_Name: Stats
+  m_Name: CStats
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4978,7 +4978,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a021d1c1f658d434595e8c6f55217736, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cStat: 0
+  cStat: 2
   nameText: {fileID: 1030325387}
   pointText: {fileID: 220098365}
   minusButton: {fileID: 558856193}
@@ -6198,6 +6198,51 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1970230306}
   m_CullTransparentMesh: 1
+--- !u!1 &2024629893
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2024629895}
+  - component: {fileID: 2024629894}
+  m_Layer: 0
+  m_Name: DataPersistenceManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2024629894
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2024629893}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69ad903b7a85e054892ac267f3e95538, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dateFileName: player_data.json
+--- !u!4 &2024629895
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2024629893}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2049557389
 GameObject:
   m_ObjectHideFlags: 0
