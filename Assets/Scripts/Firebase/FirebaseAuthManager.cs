@@ -6,6 +6,9 @@ using UnityEngine.UI;
 
 namespace Firebase {
     public class FirebaseAuthManager : MonoBehaviour {
+        
+        public static FirebaseAuthManager instance;
+        
         // Firebase variables
         [Header("Firebase")] 
         public DependencyStatus dependencyStatus;
@@ -27,9 +30,36 @@ namespace Firebase {
 
         private const string DefaultProfilePictureUrl = "https://robohash.org/34ff89714b43504fc3018653c3438eec?set=set4&bgset=&size=400x400";
 
+        private String playerName;
+        private string email;
+        
         private void Awake() {
             // Firebase Unity SDK for Android requires Google Play services
             StartCoroutine(CheckAndFixDependenciesAsync());
+            if (instance == null) {
+                instance = this;
+            } else if (instance != this) {
+                instance.SetFields();
+                Destroy(gameObject);
+            }
+        }
+
+        public void SetFields() {
+            emailLoginField = UIManager.instance.emailLoginField;
+            passwordLoginField = UIManager.instance.passwordLoginField;
+            usernameRegisterField = UIManager.instance.usernameRegisterField;
+            emailRegisterField = UIManager.instance.emailRegisterField;
+            passwordRegisterField = UIManager.instance.passwordRegisterField;
+            passwordConfirmRegisterField = UIManager.instance.passwordConfirmRegisterField;
+        }
+
+        private void Start() {
+            DontDestroyOnLoad(this.gameObject);
+        }
+
+        private void Update() {
+            playerName = _user.DisplayName ?? "";
+            email = _user.Email ?? "";
         }
 
         // ReSharper disable Unity.PerformanceAnalysis

@@ -41,14 +41,12 @@ namespace DataPersistence {
             foreach (var dataPersistenceObject in _dataPersistenceObjects) {
                 dataPersistenceObject.LoadGame(_gameData);
             }
-            Debug.Log("Saved exp: " + _gameData.exp);
         }
 
         public void SaveGame() {
             foreach (var dataPersistenceObject in _dataPersistenceObjects) {
                 dataPersistenceObject.SaveGame(ref _gameData);
             }
-            Debug.Log("Saved exp: " + _gameData.exp);
             _dataHandler.Save(_gameData);
         }
 
@@ -57,6 +55,7 @@ namespace DataPersistence {
         }
 
         private static List<IDataPersistence> FindAllDataPersistenceObjects() {
+            // Load all IDataPersistenceObjs from scene
             IEnumerable<IDataPersistence> dataPersistenceObjectsIE =
                 FindObjectsOfType<MonoBehaviour>().OfType<IDataPersistence>();
             return dataPersistenceObjectsIE.ToList();

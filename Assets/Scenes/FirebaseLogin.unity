@@ -1932,6 +1932,10 @@ MonoBehaviour:
   passwordConfirmRegisterField: {fileID: 353647575}
   profileImage: {fileID: 1513594955}
   urlInputField: {fileID: 1286889240}
+  loginButton: {fileID: 1827125016}
+  registerButton: {fileID: 225521821}
+  updateProfilePictureButton: {fileID: 635707609}
+  logOutButton: {fileID: 371813892}
 --- !u!1 &502318516
 GameObject:
   m_ObjectHideFlags: 0

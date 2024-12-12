@@ -1,41 +1,57 @@
+using System;
 using System.Collections;
+using Firebase;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour {
     public static UIManager instance;
 
     [Header("Menu Panels")] 
-    [SerializeField] private GameObject loginPanel;
-    [SerializeField] private GameObject registerPanel;
-    [SerializeField] private GameObject emailVerificationPanel;
-    [SerializeField] private GameObject gameEntrancePanel;
-    [SerializeField] private Text emailVerificationText;
-    [SerializeField] private GameObject profileUpdatePanel;
+    public GameObject loginPanel;
+    public GameObject registerPanel;
+    public GameObject emailVerificationPanel;
+    public GameObject gameEntrancePanel;
+    public Text emailVerificationText;
+    public GameObject profileUpdatePanel;
 
     // Login variables
     [Space] [Header("Login")] 
-    [SerializeField] private InputField emailLoginField;
-    [SerializeField] private InputField passwordLoginField;
+    public InputField emailLoginField;
+    public InputField passwordLoginField;
 
     // Register variables
     [Space] [Header("Register")] 
-    [SerializeField] private InputField usernameRegisterField;
-    [SerializeField] private InputField emailRegisterField;
-    [SerializeField] private InputField passwordRegisterField;
-    [SerializeField] private InputField passwordConfirmRegisterField;
-
+    public InputField usernameRegisterField;
+    public InputField emailRegisterField;
+    public InputField passwordRegisterField;
+    public InputField passwordConfirmRegisterField;
+    
     // Avatar Update
     [Space] [Header("Avatar")] 
-    [SerializeField] private Image profileImage;
-    [SerializeField] private InputField urlInputField;
+    public Image profileImage;
+    public InputField urlInputField;
     
+    [Space]
+    [Header("Firebase Authentication Buttons")]
+    public Button loginButton;
+    public Button registerButton;
+    public Button updateProfilePictureButton;
+    public Button logOutButton;    
     private bool _loadingProfilePicture = false;
     
     private void Awake() {
         if (instance == null) instance = this;
+    }
+
+    private void Start() {
+        loginButton.onClick.AddListener(() => {FirebaseAuthManager.instance.Login();});
+        registerButton.onClick.AddListener(() => {FirebaseAuthManager.instance.Register();});
+        updateProfilePictureButton.onClick.AddListener(() => {FirebaseAuthManager.instance.UpdateProfilePicture();});
+        logOutButton.onClick.AddListener(() => {FirebaseAuthManager.instance.Logout();});
     }
 
     private void ClearUI() {
