@@ -2027,69 +2027,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 433477198}
   m_CullTransparentMesh: 0
---- !u!1 &469082826
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 469082827}
-  - component: {fileID: 469082828}
-  m_Layer: 0
-  m_Name: UIManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &469082827
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 469082826}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &469082828
+--- !u!114 &469082828 stripped
 MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 5565750907101651476, guid: c0e9bbe16dce0b040b99fefff709a47e, type: 3}
+  m_PrefabInstance: {fileID: 5565750906696204504}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 469082826}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 707d46a47d7b692439724d48f893abad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  loginPanel: {fileID: 350581753}
-  registerPanel: {fileID: 770145239}
-  emailVerificationPanel: {fileID: 2112088287}
-  gameEntrancePanel: {fileID: 522438667}
-  emailVerificationText: {fileID: 1983624089}
-  profileUpdatePanel: {fileID: 1431114538}
-  emailLoginField: {fileID: 896712346}
-  passwordLoginField: {fileID: 1577326456}
-  usernameRegisterField: {fileID: 1781917333}
-  emailRegisterField: {fileID: 1542321294}
-  passwordRegisterField: {fileID: 77452608}
-  passwordConfirmRegisterField: {fileID: 353647575}
-  profileImage: {fileID: 1513594955}
-  urlInputField: {fileID: 1286889240}
-  loginButton: {fileID: 1827125016}
-  registerButton: {fileID: 225521821}
-  updateProfilePictureButton: {fileID: 635707609}
-  logOutButton: {fileID: 371813892}
-  rememberMeToggle: {fileID: 1543964621}
 --- !u!1 &502318516
 GameObject:
   m_ObjectHideFlags: 0
@@ -6670,3 +6618,136 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0e891b809151fe841b191a91582cccc5, type: 3}
+--- !u!1001 &5565750906696204504
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 5565750907101651474, guid: c0e9bbe16dce0b040b99fefff709a47e, type: 3}
+      propertyPath: m_Name
+      value: UserOnboardingManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 5565750907101651475, guid: c0e9bbe16dce0b040b99fefff709a47e, type: 3}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5565750907101651475, guid: c0e9bbe16dce0b040b99fefff709a47e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5565750907101651475, guid: c0e9bbe16dce0b040b99fefff709a47e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5565750907101651475, guid: c0e9bbe16dce0b040b99fefff709a47e, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5565750907101651475, guid: c0e9bbe16dce0b040b99fefff709a47e, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5565750907101651475, guid: c0e9bbe16dce0b040b99fefff709a47e, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5565750907101651475, guid: c0e9bbe16dce0b040b99fefff709a47e, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5565750907101651475, guid: c0e9bbe16dce0b040b99fefff709a47e, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5565750907101651475, guid: c0e9bbe16dce0b040b99fefff709a47e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5565750907101651475, guid: c0e9bbe16dce0b040b99fefff709a47e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5565750907101651475, guid: c0e9bbe16dce0b040b99fefff709a47e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5565750907101651476, guid: c0e9bbe16dce0b040b99fefff709a47e, type: 3}
+      propertyPath: loginPanel
+      value: 
+      objectReference: {fileID: 350581753}
+    - target: {fileID: 5565750907101651476, guid: c0e9bbe16dce0b040b99fefff709a47e, type: 3}
+      propertyPath: loginButton
+      value: 
+      objectReference: {fileID: 1827125016}
+    - target: {fileID: 5565750907101651476, guid: c0e9bbe16dce0b040b99fefff709a47e, type: 3}
+      propertyPath: logOutButton
+      value: 
+      objectReference: {fileID: 371813892}
+    - target: {fileID: 5565750907101651476, guid: c0e9bbe16dce0b040b99fefff709a47e, type: 3}
+      propertyPath: profileImage
+      value: 
+      objectReference: {fileID: 1513594955}
+    - target: {fileID: 5565750907101651476, guid: c0e9bbe16dce0b040b99fefff709a47e, type: 3}
+      propertyPath: registerPanel
+      value: 
+      objectReference: {fileID: 770145239}
+    - target: {fileID: 5565750907101651476, guid: c0e9bbe16dce0b040b99fefff709a47e, type: 3}
+      propertyPath: urlInputField
+      value: 
+      objectReference: {fileID: 1286889240}
+    - target: {fileID: 5565750907101651476, guid: c0e9bbe16dce0b040b99fefff709a47e, type: 3}
+      propertyPath: registerButton
+      value: 
+      objectReference: {fileID: 225521821}
+    - target: {fileID: 5565750907101651476, guid: c0e9bbe16dce0b040b99fefff709a47e, type: 3}
+      propertyPath: emailLoginField
+      value: 
+      objectReference: {fileID: 896712346}
+    - target: {fileID: 5565750907101651476, guid: c0e9bbe16dce0b040b99fefff709a47e, type: 3}
+      propertyPath: rememberMeToggle
+      value: 
+      objectReference: {fileID: 1543964621}
+    - target: {fileID: 5565750907101651476, guid: c0e9bbe16dce0b040b99fefff709a47e, type: 3}
+      propertyPath: gameEntrancePanel
+      value: 
+      objectReference: {fileID: 522438667}
+    - target: {fileID: 5565750907101651476, guid: c0e9bbe16dce0b040b99fefff709a47e, type: 3}
+      propertyPath: emailRegisterField
+      value: 
+      objectReference: {fileID: 1542321294}
+    - target: {fileID: 5565750907101651476, guid: c0e9bbe16dce0b040b99fefff709a47e, type: 3}
+      propertyPath: passwordLoginField
+      value: 
+      objectReference: {fileID: 1577326456}
+    - target: {fileID: 5565750907101651476, guid: c0e9bbe16dce0b040b99fefff709a47e, type: 3}
+      propertyPath: profileUpdatePanel
+      value: 
+      objectReference: {fileID: 1431114538}
+    - target: {fileID: 5565750907101651476, guid: c0e9bbe16dce0b040b99fefff709a47e, type: 3}
+      propertyPath: emailVerificationText
+      value: 
+      objectReference: {fileID: 1983624089}
+    - target: {fileID: 5565750907101651476, guid: c0e9bbe16dce0b040b99fefff709a47e, type: 3}
+      propertyPath: passwordRegisterField
+      value: 
+      objectReference: {fileID: 77452608}
+    - target: {fileID: 5565750907101651476, guid: c0e9bbe16dce0b040b99fefff709a47e, type: 3}
+      propertyPath: usernameRegisterField
+      value: 
+      objectReference: {fileID: 1781917333}
+    - target: {fileID: 5565750907101651476, guid: c0e9bbe16dce0b040b99fefff709a47e, type: 3}
+      propertyPath: emailVerificationPanel
+      value: 
+      objectReference: {fileID: 2112088287}
+    - target: {fileID: 5565750907101651476, guid: c0e9bbe16dce0b040b99fefff709a47e, type: 3}
+      propertyPath: updateProfilePictureButton
+      value: 
+      objectReference: {fileID: 635707609}
+    - target: {fileID: 5565750907101651476, guid: c0e9bbe16dce0b040b99fefff709a47e, type: 3}
+      propertyPath: passwordConfirmRegisterField
+      value: 
+      objectReference: {fileID: 353647575}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: c0e9bbe16dce0b040b99fefff709a47e, type: 3}

@@ -1,10 +1,15 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using DataPersistence.Data;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace DataPersistence {
     public class DataPersistenceManager : MonoBehaviour {
+        public static DataPersistenceManager Instance { get; private set; }
+
         [Header("File Storage Config")] [SerializeField]
         private string gameDataFileName = "";
 
@@ -12,22 +17,36 @@ namespace DataPersistence {
 
         private GameData _gameData;
         private ClientConfig _clientConfig;
-        public static DataPersistenceManager instance;
         private List<IGameDataDataPersistence> _gameDataPersistenceObjects;
         private List<IClientConfigDataPersistence> _clientConfigDataPersistenceObjects;
         private FileDataHandler _dataHandler;
 
         private void Awake() {
             DontDestroyOnLoad(gameObject);
-            if (instance == null)
-                instance = this;
-            else if (instance != this) Destroy(gameObject);
+            if (Instance == null)
+                Instance = this;
+            else if (Instance != this) Destroy(gameObject);
         }
 
-        private void Start() {
+        private void OnEnable() {
+            SceneManager.sceneLoaded += OnSceneLoaded;
+            SceneManager.sceneUnloaded += OnSceneUnloaded;
+        }
+
+        private void OnDisable() {
+            SceneManager.sceneLoaded -= OnSceneLoaded;
+            SceneManager.sceneUnloaded -= OnSceneUnloaded;
+        }
+
+        private void OnSceneLoaded(Scene scene, LoadSceneMode loadSceneMode) {
             _dataHandler = new FileDataHandler(Application.persistentDataPath, gameDataFileName, clientConfigFileName);
             _gameDataPersistenceObjects = FindAllGameDataPersistenceObjects();
-            _clientConfigDataPersistenceObjects = FindAlClientConfigDataPersistenceObjects();
+            _clientConfigDataPersistenceObjects = FindAlClientConfigDataPersistenceObjects();            
+        }
+
+        private void OnSceneUnloaded(Scene scene) {
+            SaveGame();
+            SaveClientConfig();
         }
 
         public void NewGame() {
@@ -71,11 +90,6 @@ namespace DataPersistence {
             foreach (var dataPersistenceObject in _clientConfigDataPersistenceObjects)
                 dataPersistenceObject.SaveClientConfig(ref _clientConfig);
             _dataHandler.SaveClientConfig(_clientConfig);
-        }
-
-        private void OnApplicationQuit() {
-            SaveGame();
-            SaveClientConfig();
         }
 
         private static List<IGameDataDataPersistence> FindAllGameDataPersistenceObjects() {

@@ -3,11 +3,13 @@ using System.Collections;
 using DataPersistence;
 using Firebase.Auth;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UserOnboarding;
 
 namespace Firebase {
     public class FirebaseAuthManager : MonoBehaviour {
-        public static FirebaseAuthManager instance;
+        public static FirebaseAuthManager Instance {get; private set;}
 
         // Firebase variables
         [Header("Firebase")] public DependencyStatus dependencyStatus;
@@ -33,22 +35,22 @@ namespace Firebase {
         private void Awake() {
             // Firebase Unity SDK for Android requires Google Play services
             StartCoroutine(CheckAndFixDependenciesAsync());
-            if (instance == null) {
-                instance = this;
+            if (Instance == null) {
+                Instance = this;
             }
-            else if (instance != this) {
-                instance.SetFields();
+            else if (Instance != this) {
+                Instance.SetFields();
                 Destroy(gameObject);
             }
         }
 
         private void SetFields() {
-            emailLoginField = UIManager.instance.emailLoginField;
-            passwordLoginField = UIManager.instance.passwordLoginField;
-            usernameRegisterField = UIManager.instance.usernameRegisterField;
-            emailRegisterField = UIManager.instance.emailRegisterField;
-            passwordRegisterField = UIManager.instance.passwordRegisterField;
-            passwordConfirmRegisterField = UIManager.instance.passwordConfirmRegisterField;
+            emailLoginField = UserOnboardingManager.instance.emailLoginField;
+            passwordLoginField = UserOnboardingManager.instance.passwordLoginField;
+            usernameRegisterField = UserOnboardingManager.instance.usernameRegisterField;
+            emailRegisterField = UserOnboardingManager.instance.emailRegisterField;
+            passwordRegisterField = UserOnboardingManager.instance.passwordRegisterField;
+            passwordConfirmRegisterField = UserOnboardingManager.instance.passwordConfirmRegisterField;
         }
 
         private void Start() {
@@ -72,8 +74,8 @@ namespace Firebase {
                 yield return new WaitForEndOfFrame();
                 // Check For Auto Login
                 // StartCoroutine(CheckForAutoLogin());
-                DataPersistenceManager.instance.LoadGame();
-                DataPersistenceManager.instance.LoadClientConfig();
+                DataPersistenceManager.Instance.LoadGame();
+                DataPersistenceManager.Instance.LoadClientConfig();
             }
             else {
                 Debug.LogError("Could not resolve all Firebase dependencies: " + dependencyStatus);
@@ -99,7 +101,7 @@ namespace Firebase {
                 AutoLogin();
             }
             else {
-                UIManager.instance.OpenLoginPanel();
+                UserOnboardingManager.instance.OpenLoginPanel();
             }
         }
 
@@ -113,14 +115,14 @@ namespace Firebase {
                     // Check if user have profile picture
                     if (_user.PhotoUrl != null) {
                         if (!string.IsNullOrEmpty(_user.PhotoUrl.ToString()))
-                            UIManager.instance.LoadProfilePicture(_user.PhotoUrl.ToString());
+                            UserOnboardingManager.instance.LoadProfilePicture(_user.PhotoUrl.ToString());
                     }
                     else {
-                        UIManager.instance.LoadProfilePicture(DefaultProfilePictureUrl);
+                        UserOnboardingManager.instance.LoadProfilePicture(DefaultProfilePictureUrl);
                     }
 
                     // Open Game Entrance Panel after loaded User's profile picture
-                    UIManager.instance.OpenGameEntrancePanel();
+                    UserOnboardingManager.instance.OpenGameEntrancePanel();
                 }
                 // send email for verification if user has not verified yet
                 else {
@@ -129,7 +131,7 @@ namespace Firebase {
             }
             // login if there is no any user
             else {
-                UIManager.instance.OpenLoginPanel();
+                UserOnboardingManager.instance.OpenLoginPanel();
             }
         }
 
@@ -143,7 +145,7 @@ namespace Firebase {
                 var signedIn = _user != _auth.CurrentUser && _auth.CurrentUser != null;
                 if (!signedIn && _user != null) {
                     Debug.Log("Signed out + " + _user.UserId);
-                    UIManager.instance.OpenLoginPanel();
+                    UserOnboardingManager.instance.OpenLoginPanel();
                 }
 
                 // Change previous user to current user
@@ -153,7 +155,7 @@ namespace Firebase {
         }
 
         public void Logout() {
-            if (_auth != null && _user != null && UIManager.instance.IsloadingProfilePicture() == false)
+            if (_auth != null && _user != null && UserOnboardingManager.instance.IsloadingProfilePicture() == false)
                 _auth.SignOut();
         }
 
@@ -197,13 +199,13 @@ namespace Firebase {
 
                     if (_user.PhotoUrl != null) {
                         if (!string.IsNullOrEmpty(_user.PhotoUrl.ToString()))
-                            UIManager.instance.LoadProfilePicture(_user.PhotoUrl.ToString());
+                            UserOnboardingManager.instance.LoadProfilePicture(_user.PhotoUrl.ToString());
                     }
                     else {
-                        UIManager.instance.LoadProfilePicture(DefaultProfilePictureUrl);
+                        UserOnboardingManager.instance.LoadProfilePicture(DefaultProfilePictureUrl);
                     }
 
-                    UIManager.instance.OpenGameEntrancePanel();
+                    UserOnboardingManager.instance.OpenGameEntrancePanel();
                 }
                 else {
                     SendEmailForVerification();
@@ -281,7 +283,7 @@ namespace Firebase {
                         // Update profile task successfully
                         Debug.Log($"{_user.DisplayName} registered successfully");
                         if (_user.IsEmailVerified)
-                            UIManager.instance.OpenLoginPanel();
+                            UserOnboardingManager.instance.OpenLoginPanel();
                         else
                             SendEmailForVerification();
                     }
@@ -311,10 +313,10 @@ namespace Firebase {
                         AuthError.TooManyRequests => "Too Many Requests",
                         _ => "Unknown Error"
                     };
-                    UIManager.instance.OpenEmailVerificationResponse(false, null, errorMessage);
+                    UserOnboardingManager.instance.OpenEmailVerificationResponse(false, null, errorMessage);
                 }
                 else {
-                    UIManager.instance.OpenEmailVerificationResponse(true, _auth.CurrentUser.Email, null);
+                    UserOnboardingManager.instance.OpenEmailVerificationResponse(true, _auth.CurrentUser.Email, null);
                     Debug.Log("Email has successfully sent");
                 }
             }
@@ -328,7 +330,7 @@ namespace Firebase {
         private IEnumerator UpdateProfilePictureAsync() {
             if (_user != null) {
                 // Get url from urlInputField of UIManager and create new Profile from that
-                var url = UIManager.instance.GetProfilePictureURL();
+                var url = UserOnboardingManager.instance.GetProfilePictureURL();
                 var userProfile = new UserProfile {
                     PhotoUrl = new Uri(url)
                 };
@@ -339,7 +341,7 @@ namespace Firebase {
                 if (profileTask.Exception != null)
                     Debug.LogError(profileTask.Exception);
                 else
-                    UIManager.instance.LoadProfilePicture(_user.PhotoUrl.ToString());
+                    UserOnboardingManager.instance.LoadProfilePicture(_user.PhotoUrl.ToString());
             }
         }
     }
