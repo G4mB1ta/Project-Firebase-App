@@ -3,7 +3,7 @@ using DataPersistence;
 using DataPersistence.Data;
 using UnityEngine;
 
-public class PlayerStats : MonoBehaviour, IDataPersistence {
+public class PlayerStats : MonoBehaviour, IGameDataDataPersistence {
     // Player level sys
     private int _level;
     private int _exp;

@@ -1,9 +1,10 @@
 ﻿using DataPersistence.Data;
 
 namespace DataPersistence {
-    public interface IDataPersistence {
+    public interface IGameDataDataPersistence {
         void LoadGame(GameData gameData);
 
         void SaveGame(ref GameData gameData);
+        
     }
 }

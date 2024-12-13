@@ -1,17 +1,16 @@
-using System;
 using System.Collections;
+using DataPersistence;
+using DataPersistence.Data;
 using Firebase;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
-public class UIManager : MonoBehaviour {
+public class UIManager : MonoBehaviour, IClientConfigDataPersistence {
     public static UIManager instance;
 
-    [Header("Menu Panels")] 
-    public GameObject loginPanel;
+    [Header("Menu Panels")] public GameObject loginPanel;
     public GameObject registerPanel;
     public GameObject emailVerificationPanel;
     public GameObject gameEntrancePanel;
@@ -19,39 +18,39 @@ public class UIManager : MonoBehaviour {
     public GameObject profileUpdatePanel;
 
     // Login variables
-    [Space] [Header("Login")] 
-    public InputField emailLoginField;
+    [Space] [Header("Login")] public InputField emailLoginField;
     public InputField passwordLoginField;
 
     // Register variables
-    [Space] [Header("Register")] 
-    public InputField usernameRegisterField;
+    [Space] [Header("Register")] public InputField usernameRegisterField;
     public InputField emailRegisterField;
     public InputField passwordRegisterField;
     public InputField passwordConfirmRegisterField;
-    
+
     // Avatar Update
-    [Space] [Header("Avatar")] 
-    public Image profileImage;
+    [Space] [Header("Avatar")] public Image profileImage;
     public InputField urlInputField;
-    
-    [Space]
-    [Header("Firebase Authentication Buttons")]
+
+    [Space] [Header("Firebase Authentication Buttons")]
     public Button loginButton;
+
     public Button registerButton;
     public Button updateProfilePictureButton;
-    public Button logOutButton;    
-    private bool _loadingProfilePicture = false;
-    
+    public Button logOutButton;
+
+    [Space] [Header("Other Settings")] public Toggle rememberMeToggle;
+    private bool _loadingProfilePicture;
+
     private void Awake() {
         if (instance == null) instance = this;
     }
 
     private void Start() {
-        loginButton.onClick.AddListener(() => {FirebaseAuthManager.instance.Login();});
-        registerButton.onClick.AddListener(() => {FirebaseAuthManager.instance.Register();});
-        updateProfilePictureButton.onClick.AddListener(() => {FirebaseAuthManager.instance.UpdateProfilePicture();});
-        logOutButton.onClick.AddListener(() => {FirebaseAuthManager.instance.Logout();});
+        OpenLoginPanel();
+        loginButton.onClick.AddListener(() => { FirebaseAuthManager.instance.Login(); });
+        registerButton.onClick.AddListener(() => { FirebaseAuthManager.instance.Register(); });
+        updateProfilePictureButton.onClick.AddListener(() => { FirebaseAuthManager.instance.UpdateProfilePicture(); });
+        logOutButton.onClick.AddListener(() => { FirebaseAuthManager.instance.Logout(); });
     }
 
     private void ClearUI() {
@@ -66,18 +65,22 @@ public class UIManager : MonoBehaviour {
         ClearUI();
         ClearLoginInputFields();
         loginPanel.SetActive(true);
+        Debug.Log("Opening login panel");
     }
 
     public void OpenRegisterPanel() {
         ClearUI();
         ClearRegisterInputFields();
         registerPanel.SetActive(true);
+        Debug.Log("Open register panel");
     }
 
     public void OpenEmailVerificationResponse(bool isEmailSend, string emailId, string errorMessage) {
         ClearUI();
         emailVerificationPanel.SetActive(true);
-        emailVerificationText.text = isEmailSend ? $"Please verify your email address\nVerification email has been sent to {emailId}" : $"Couldn't send email: {errorMessage}";
+        emailVerificationText.text = isEmailSend
+            ? $"Please verify your email address\nVerification email has been sent to {emailId}"
+            : $"Couldn't send email: {errorMessage}";
     }
 
     public void OpenProfilePictureUpdatePanel() {
@@ -85,16 +88,19 @@ public class UIManager : MonoBehaviour {
         ClearUI();
         profileUpdatePanel.SetActive(true);
         urlInputField.text = "";
+        Debug.Log("Open profile picture update panel");
     }
 
     public void OpenGameEntrancePanel() {
         ClearUI();
         gameEntrancePanel.SetActive(true);
+        Debug.Log("Open game entrance panel");
     }
 
     private void ClearLoginInputFields() {
         emailLoginField.text = "";
         passwordLoginField.text = "";
+        rememberMeToggle.isOn = false;
     }
 
     private void ClearRegisterInputFields() {
@@ -116,7 +122,7 @@ public class UIManager : MonoBehaviour {
     // ReSharper disable Unity.PerformanceAnalysis
     private IEnumerator LoadProfilePictureIE(string url) {
         _loadingProfilePicture = true;
-        
+
         // Loading User's profile picture        
         var uwr = UnityWebRequestTexture.GetTexture(url);
         yield return uwr.SendWebRequest();
@@ -133,6 +139,7 @@ public class UIManager : MonoBehaviour {
             var sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.zero);
             profileImage.sprite = sprite;
         }
+
         _loadingProfilePicture = false;
     }
 
@@ -142,5 +149,20 @@ public class UIManager : MonoBehaviour {
 
     public string GetProfilePictureURL() {
         return urlInputField.text;
+    }
+
+    public void LoadClientConfig(ClientConfig clientConfig) {
+        rememberMeToggle.isOn = clientConfig.rememberLoginData;
+        emailLoginField.text = clientConfig.email;
+        passwordLoginField.text = clientConfig.password;
+
+        // Auto login here
+        if (rememberMeToggle.isOn) StartCoroutine(FirebaseAuthManager.instance.CheckForAutoLogin());
+    }
+
+    public void SaveClientConfig(ref ClientConfig clientConfig) {
+        clientConfig.rememberLoginData = rememberMeToggle.isOn;
+        clientConfig.email = clientConfig.rememberLoginData ? emailLoginField.text : "";
+        clientConfig.password = clientConfig.rememberLoginData ? passwordLoginField.text : "";
     }
 }
